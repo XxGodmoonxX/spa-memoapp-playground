@@ -75,10 +75,6 @@ export default function Detail() {
       {memo &&
         (editing ? (
           <form name="form">
-            {/* updateDate:
-            {memo.updateDate && format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
-            isPinned:: {memo.isPinned} */}
-            <br />
             title:
             <TitleInput type="text" ref={titleRef} defaultValue={memo.title} />
             <br />
