@@ -1,15 +1,14 @@
 import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import { STORAGE_KEY } from '../constants'
 
-type Memo = {
+export type Memo = {
   title: string | undefined
   content: string | undefined
   updateDate: number | undefined
   isPinned: boolean | undefined
 }
-
-const STORAGE_KEY = 'spa-memoapp-playground'
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
@@ -45,7 +44,7 @@ export default function Home() {
       {memo &&
         memo.map((memo, index) => {
           return (
-            <a href={`detail?${index}`} key={index}>
+            <a href={`detail/${index}`} key={index}>
               title: {memo.title}
               <br />
               content: {memo.content}
