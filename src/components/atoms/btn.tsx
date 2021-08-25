@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 type Props = {
-  action: 'submit' | 'delete' | 'edit'
+  action: 'submit' | 'delete' | 'edit' | 'back'
   children: React.ReactNode
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -30,17 +30,10 @@ const Container = styled.button<Pick<Props, 'action'>>`
       border: none;
     `}
   ${(props) =>
-    props.action === 'edit' &&
+    props.action !== 'delete' &&
     css`
       background-color: white;
       color: black;
       border: 1px solid black;
     `}
-    ${(props) =>
-    props.action === 'submit' &&
-    css`
-      background-color: white;
-      color: black;
-      border: 1px solid black;
-    `};
 `

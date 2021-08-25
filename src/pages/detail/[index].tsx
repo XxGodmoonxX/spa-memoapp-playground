@@ -84,6 +84,10 @@ export default function Detail() {
     }
   }
 
+  const handleBack = () => {
+    setEditng(!editing)
+  }
+
   if (!existed) {
     return <></>
   }
@@ -92,23 +96,28 @@ export default function Detail() {
     <Wrapper>
       {memo &&
         (editing ? (
-          <FormWrapper>
-            <Text>タイトル</Text>
-            <TitleInput inputRef={titleRef} defaultValue={memo.title} />
-            <Text>内容</Text>
-            <Textarea ref={textareeRef} defaultValue={memo.content} />
-            <CheckBox
-              checkboxRef={checkboxRef}
-              defaultChecked={memo.isPinned}
-              labelText="ピン留めする"
-            />
-            <Btn action="submit" onClick={handleSubmit}>
-              上記内容でメモを更新する
+          <>
+            <FormWrapper>
+              <Text>タイトル</Text>
+              <TitleInput inputRef={titleRef} defaultValue={memo.title} />
+              <Text>内容</Text>
+              <Textarea ref={textareeRef} defaultValue={memo.content} />
+              <CheckBox
+                checkboxRef={checkboxRef}
+                defaultChecked={memo.isPinned}
+                labelText="ピン留めする"
+              />
+              <Btn action="submit" onClick={handleSubmit}>
+                上記内容でメモを更新する
+              </Btn>
+              <Btn action="delete" onClick={handleSubmitDelete}>
+                メモを削除する
+              </Btn>
+            </FormWrapper>
+            <Btn action="back" onClick={handleBack}>
+              戻る
             </Btn>
-            <Btn action="delete" onClick={handleSubmitDelete}>
-              メモを削除する
-            </Btn>
-          </FormWrapper>
+          </>
         ) : (
           <>
             title: {memo.title}
