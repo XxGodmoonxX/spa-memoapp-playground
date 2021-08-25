@@ -55,16 +55,17 @@ export default function Detail() {
     setEditng(!editing)
   }
 
-  const handleSubmitDelete = (e: InputEvent) => {
+  const handleSubmitDelete = () => {
     console.log('handleSubmitDelete')
+    const result = confirm('削除いたしますか？')
 
-    const storage = localStorage.getItem(STORAGE_KEY)
-    const item: Memo[] = storage ? JSON.parse(storage) : null
-    const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
-    console.log(newItem)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-
-    // router.push('/')
+    if (result) {
+      const storage = localStorage.getItem(STORAGE_KEY)
+      const item: Memo[] = storage ? JSON.parse(storage) : null
+      const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
+      router.push('/')
+    }
   }
 
   return (
