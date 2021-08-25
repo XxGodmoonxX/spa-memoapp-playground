@@ -1,8 +1,12 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
-import styled from 'styled-components'
 import { Memo } from '../'
+import { Btn } from '../../components/atoms/btn'
+import { CheckBox } from '../../components/atoms/checkbox'
+import { Textarea } from '../../components/atoms/textArea'
+import { TitleInput } from '../../components/atoms/titleInput'
+import { Wrapper } from '../../components/organisms/wrapper'
 import { STORAGE_KEY } from '../../constants'
 
 export default function Detail() {
@@ -39,7 +43,6 @@ export default function Detail() {
     console.log('handleSubmit')
 
     if (!memo) {
-      router.push('/404')
       return
     }
 
@@ -48,7 +51,7 @@ export default function Detail() {
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
-      isPinned: checkboxRef.current?.checked
+      isPinned: checkboxRef.current?.checked ? true : false
     }
 
     const storage = localStorage.getItem(STORAGE_KEY)
@@ -73,7 +76,9 @@ export default function Detail() {
       const item: Memo[] = storage ? JSON.parse(storage) : null
       const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-      router.push('/404')
+      router.push('/')
+    } else {
+      setEditng(!editing)
     }
   }
 
@@ -82,30 +87,29 @@ export default function Detail() {
   }
 
   return (
-    <>
+    <Wrapper>
       {index}
       <br />
       {memo &&
         (editing ? (
           <form name="form">
             title:
-            <TitleInput type="text" ref={titleRef} defaultValue={memo.title} />
+            <TitleInput inputRef={titleRef} defaultValue={memo.title} />
             <br />
             content:
             <Textarea ref={textareeRef} defaultValue={memo.content} />
             <br />
             <CheckBox
-              type="checkbox"
-              ref={checkboxRef}
+              checkboxRef={checkboxRef}
               defaultChecked={memo.isPinned}
             />
             <br />
-            <DeleteBtn type="button" onClick={handleSubmitDelete}>
+            <Btn action="delete" onClick={handleSubmitDelete}>
               delete
-            </DeleteBtn>
-            <SubmitBtn type="button" onClick={handleSubmit}>
+            </Btn>
+            <Btn action="submit" onClick={handleSubmit}>
               Submit
-            </SubmitBtn>
+            </Btn>
             <br />
           </form>
         ) : (
@@ -119,21 +123,11 @@ export default function Detail() {
             <br />
             isPinned: {memo.isPinned ? 'true' : 'false'}
             <br />
-            <button type="button" onClick={handleClickEdit}>
-              編集
-            </button>
+            <Btn action="edit" onClick={handleClickEdit}>
+              Edit
+            </Btn>
           </>
         ))}
-    </>
+    </Wrapper>
   )
 }
-
-const TitleInput = styled.input``
-
-const Textarea = styled.textarea``
-
-const CheckBox = styled.input``
-
-const SubmitBtn = styled.button``
-
-const DeleteBtn = styled.button``

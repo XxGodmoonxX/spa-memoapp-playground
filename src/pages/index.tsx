@@ -1,6 +1,10 @@
 import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import { Btn } from '../components/atoms/btn'
+import { Textarea } from '../components/atoms/textArea'
+import { TitleInput } from '../components/atoms/titleInput'
+import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../constants'
 
 export type Memo = {
@@ -8,7 +12,7 @@ export type Memo = {
   title: string | undefined
   content: string | undefined
   updateDate: number
-  isPinned: boolean | undefined
+  isPinned: boolean
 }
 
 export default function Home() {
@@ -63,12 +67,12 @@ export default function Home() {
   }
 
   return (
-    <>
+    <Wrapper>
       <Title>My page</Title>
       {memo &&
-        memo.map((memo, index) => {
+        memo.map((memo) => {
           return (
-            <a href={`detail/${memo.id}`} key={index}>
+            <a href={`detail/${memo.id}`} key={memo.id}>
               id:{memo.id}
               <br />
               title: {memo.title}
@@ -86,15 +90,15 @@ export default function Home() {
         })}
       <br />
       <form name="form">
-        <TitleInput type="text" ref={titleRef} />
+        <TitleInput inputRef={titleRef} />
         <br />
         <Textarea ref={textareeRef} />
         <br />
-        <SubmitBtn type="submit" onClick={handleSubmit}>
+        <Btn action="submit" onClick={handleSubmit}>
           Submit
-        </SubmitBtn>
+        </Btn>
       </form>
-    </>
+    </Wrapper>
   )
 }
 
@@ -102,9 +106,3 @@ const Title = styled.h1`
   color: red;
   font-size: 50px;
 `
-
-const TitleInput = styled.input``
-
-const Textarea = styled.textarea``
-
-const SubmitBtn = styled.button``
