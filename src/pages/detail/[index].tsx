@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
 import { Memo } from '../'
@@ -9,6 +8,7 @@ import { Textarea } from '../../components/atoms/textArea'
 import { Title } from '../../components/atoms/title'
 import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
+import { MemoLink } from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
 import { STORAGE_KEY } from '../../constants'
 
@@ -123,15 +123,7 @@ export default function Detail() {
           </>
         ) : (
           <>
-            title: {memo.title}
-            <br />
-            content: {memo.content}
-            <br />
-            updateDate:
-            {memo.updateDate && format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
-            <br />
-            isPinned: {memo.isPinned ? 'true' : 'false'}
-            <br />
+            <MemoLink memo={memo} isLink={false} />
             <Btn action="edit" onClick={handleClickEdit}>
               メモを編集する
             </Btn>
