@@ -7,6 +7,7 @@ import { Textarea } from '../components/atoms/textArea'
 import { Title } from '../components/atoms/title'
 import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
+import { MemoLink } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../constants'
 
@@ -103,20 +104,7 @@ export default function Home() {
           <Btn onClick={handleAdd}>メモを追加する</Btn>
           {memo &&
             memo.map((memo) => {
-              return (
-                <a href={`detail/${memo.id}`} key={memo.id}>
-                  title: {memo.title}
-                  <br />
-                  content: {memo.content}
-                  <br />
-                  updateDate:
-                  {memo.updateDate &&
-                    format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
-                  <br />
-                  isPinned: {memo.isPinned ? 'true' : 'false'}
-                  <br />
-                </a>
-              )
+              return <MemoLink memo={memo} key={memo.id} />
             })}
         </>
       )}
