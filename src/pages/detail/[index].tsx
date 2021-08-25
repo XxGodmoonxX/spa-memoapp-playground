@@ -9,6 +9,7 @@ export default function Detail() {
   const router = useRouter()
   const { index } = router.query
   const [memo, setMemo] = useState<Memo>()
+  const [existed, setExisted] = useState<boolean>(false)
   const [editing, setEditng] = useState<boolean>(false)
   const titleRef = useRef<HTMLInputElement>(null)
   const textareeRef = useRef<HTMLTextAreaElement>(null)
@@ -20,10 +21,12 @@ export default function Detail() {
 
       const storage = localStorage.getItem(STORAGE_KEY)
       const item: Memo = storage ? JSON.parse(storage)[Number(index)] : null
-      if (!item) {
+      if (item) {
+        setExisted(true)
+        setMemo(item)
+      } else {
         router.push('/')
       }
-      setMemo(item)
     }
   }, [index, editing])
 
@@ -72,6 +75,10 @@ export default function Detail() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
       router.push('/')
     }
+  }
+
+  if (!existed) {
+    return <></>
   }
 
   return (
