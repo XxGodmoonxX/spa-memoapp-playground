@@ -49,9 +49,15 @@ export default function Detail() {
     }
 
     const storage = localStorage.getItem(STORAGE_KEY)
-    const item: Memo[] = storage ? JSON.parse(storage) : null
-    item.splice(Number(index), 1, currentMemo)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...item]))
+    const items: Memo[] = storage ? JSON.parse(storage) : null
+    const newItems = items.map((item) => {
+      if (item.id === memo.id) {
+        return currentMemo
+      }
+
+      return item
+    })
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItems]))
     setEditng(!editing)
   }
 
@@ -90,7 +96,7 @@ export default function Detail() {
             <DeleteBtn type="button" onClick={handleSubmitDelete}>
               delete
             </DeleteBtn>
-            <SubmitBtn type="submit" onClick={handleSubmit}>
+            <SubmitBtn type="button" onClick={handleSubmit}>
               Submit
             </SubmitBtn>
             <br />
