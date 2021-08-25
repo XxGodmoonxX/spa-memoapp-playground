@@ -7,7 +7,7 @@ export type Memo = {
   id: number
   title: string | undefined
   content: string | undefined
-  updateDate: number | undefined
+  updateDate: number
   isPinned: boolean | undefined
 }
 
@@ -18,14 +18,26 @@ export default function Home() {
 
   useEffect(() => {
     const storage = localStorage.getItem(STORAGE_KEY)
-    setMemo(storage ? JSON.parse(storage) : null)
+    const list: Memo[] | null = storage ? JSON.parse(storage) : null
+    if (!list) {
+      return
+    }
+
+    list.sort((a, b) => {
+      return b.updateDate - a.updateDate
+    })
+
+    setMemo(list ? list : undefined)
   }, [])
 
   const handleSubmit = () => {
     console.log('handleSubmit')
 
+    const storage = localStorage.getItem(STORAGE_KEY)
+    const list: Memo[] | null = storage ? JSON.parse(storage) : null
+
     const currentMemo: Memo = {
-      id: memo?.length ? memo?.length : 0,
+      id: list?.length ? list?.length : 0,
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
@@ -34,9 +46,9 @@ export default function Home() {
 
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(memo ? [...memo, currentMemo] : [currentMemo])
+      JSON.stringify(list ? [...list, currentMemo] : [currentMemo])
     )
-    const storage = localStorage.getItem(STORAGE_KEY)
+
     setMemo(storage ? JSON.parse(storage) : null)
   }
 
