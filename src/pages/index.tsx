@@ -52,19 +52,22 @@ export default function Home() {
               updateDate:
               {memo.updateDate &&
                 format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
-              isPinned:: {memo.isPinned}
+              <br />
+              isPinned: {memo.isPinned ? 'true' : 'false'}
               <br />
             </a>
           )
         })}
       <br />
-      <TitleInput type="text" ref={titleRef} />
-      <br />
-      <Textarea ref={textareeRef} />
-      <br />
-      <SubmitBtn type="submit" onClick={handleSubmit}>
-        Submit
-      </SubmitBtn>
+      <form name="form">
+        <TitleInput type="text" ref={titleRef} />
+        <br />
+        <Textarea ref={textareeRef} />
+        <br />
+        <SubmitBtn type="submit" onClick={handleSubmit}>
+          Submit
+        </SubmitBtn>
+      </form>
     </>
   )
 }
