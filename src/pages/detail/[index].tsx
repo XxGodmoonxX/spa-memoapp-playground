@@ -1,8 +1,15 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
-import styled from 'styled-components'
 import { Memo } from '../'
+import { Btn } from '../../components/atoms/btn'
+import { CheckBox } from '../../components/atoms/checkbox'
+import { Text } from '../../components/atoms/text'
+import { Textarea } from '../../components/atoms/textArea'
+import { Title } from '../../components/atoms/title'
+import { TitleInput } from '../../components/atoms/titleInput'
+import { FormWrapper } from '../../components/molecules/formWrapper'
+import { Wrapper } from '../../components/organisms/wrapper'
 import { STORAGE_KEY } from '../../constants'
 
 export default function Detail() {
@@ -39,7 +46,6 @@ export default function Detail() {
     console.log('handleSubmit')
 
     if (!memo) {
-      router.push('/404')
       return
     }
 
@@ -48,7 +54,7 @@ export default function Detail() {
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
-      isPinned: checkboxRef.current?.checked
+      isPinned: checkboxRef.current?.checked ? true : false
     }
 
     const storage = localStorage.getItem(STORAGE_KEY)
@@ -73,8 +79,14 @@ export default function Detail() {
       const item: Memo[] = storage ? JSON.parse(storage) : null
       const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-      router.push('/404')
+      router.push('/')
+    } else {
+      setEditng(!editing)
     }
+  }
+
+  const handleBack = () => {
+    setEditng(!editing)
   }
 
   if (!existed) {
@@ -82,32 +94,33 @@ export default function Detail() {
   }
 
   return (
-    <>
-      {index}
-      <br />
+    <Wrapper>
+      <Title>メモ詳細</Title>
+
       {memo &&
         (editing ? (
-          <form name="form">
-            title:
-            <TitleInput type="text" ref={titleRef} defaultValue={memo.title} />
-            <br />
-            content:
-            <Textarea ref={textareeRef} defaultValue={memo.content} />
-            <br />
-            <CheckBox
-              type="checkbox"
-              ref={checkboxRef}
-              defaultChecked={memo.isPinned}
-            />
-            <br />
-            <DeleteBtn type="button" onClick={handleSubmitDelete}>
-              delete
-            </DeleteBtn>
-            <SubmitBtn type="button" onClick={handleSubmit}>
-              Submit
-            </SubmitBtn>
-            <br />
-          </form>
+          <>
+            <FormWrapper>
+              <Text>タイトル</Text>
+              <TitleInput inputRef={titleRef} defaultValue={memo.title} />
+              <Text>内容</Text>
+              <Textarea ref={textareeRef} defaultValue={memo.content} />
+              <CheckBox
+                checkboxRef={checkboxRef}
+                defaultChecked={memo.isPinned}
+                labelText="ピン留めする"
+              />
+              <Btn action="submit" onClick={handleSubmit}>
+                上記内容でメモを更新する
+              </Btn>
+              <Btn action="delete" onClick={handleSubmitDelete}>
+                メモを削除する
+              </Btn>
+            </FormWrapper>
+            <Btn action="back" onClick={handleBack}>
+              戻る
+            </Btn>
+          </>
         ) : (
           <>
             title: {memo.title}
@@ -119,21 +132,11 @@ export default function Detail() {
             <br />
             isPinned: {memo.isPinned ? 'true' : 'false'}
             <br />
-            <button type="button" onClick={handleClickEdit}>
-              編集
-            </button>
+            <Btn action="edit" onClick={handleClickEdit}>
+              メモを編集する
+            </Btn>
           </>
         ))}
-    </>
+    </Wrapper>
   )
 }
-
-const TitleInput = styled.input``
-
-const Textarea = styled.textarea``
-
-const CheckBox = styled.input``
-
-const SubmitBtn = styled.button``
-
-const DeleteBtn = styled.button``

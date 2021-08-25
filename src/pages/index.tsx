@@ -1,6 +1,13 @@
 import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import { Btn } from '../components/atoms/btn'
+import { Text } from '../components/atoms/text'
+import { Textarea } from '../components/atoms/textArea'
+import { Title } from '../components/atoms/title'
+import { TitleInput } from '../components/atoms/titleInput'
+import { FormWrapper } from '../components/molecules/formWrapper'
+import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../constants'
 
 export type Memo = {
@@ -8,13 +15,14 @@ export type Memo = {
   title: string | undefined
   content: string | undefined
   updateDate: number
-  isPinned: boolean | undefined
+  isPinned: boolean
 }
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
   const titleRef = useRef<HTMLInputElement>(null)
   const textareeRef = useRef<HTMLTextAreaElement>(null)
+  const [adding, setAdding] = useState<boolean>(false)
 
   useEffect(() => {
     const storage = localStorage.getItem(STORAGE_KEY)
@@ -60,51 +68,58 @@ export default function Home() {
     )
 
     setMemo(storage ? JSON.parse(storage) : null)
+    setAdding(false)
+  }
+
+  const handleAdd = () => {
+    setAdding(true)
+  }
+
+  const handleBack = () => {
+    setAdding(false)
   }
 
   return (
-    <>
-      <Title>My page</Title>
-      {memo &&
-        memo.map((memo, index) => {
-          return (
-            <a href={`detail/${memo.id}`} key={index}>
-              id:{memo.id}
-              <br />
-              title: {memo.title}
-              <br />
-              content: {memo.content}
-              <br />
-              updateDate:
-              {memo.updateDate &&
-                format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
-              <br />
-              isPinned: {memo.isPinned ? 'true' : 'false'}
-              <br />
-            </a>
-          )
-        })}
-      <br />
-      <form name="form">
-        <TitleInput type="text" ref={titleRef} />
-        <br />
-        <Textarea ref={textareeRef} />
-        <br />
-        <SubmitBtn type="submit" onClick={handleSubmit}>
-          Submit
-        </SubmitBtn>
-      </form>
-    </>
+    <Wrapper>
+      <Title>メモ一覧</Title>
+
+      {adding ? (
+        <>
+          <FormWrapper>
+            <Text>タイトル</Text>
+            <TitleInput inputRef={titleRef} />
+            <Text>内容</Text>
+            <Textarea ref={textareeRef} />
+            <Btn action="submit" onClick={handleSubmit}>
+              上記内容でメモを追加
+            </Btn>
+          </FormWrapper>
+          <Btn action="back" onClick={handleBack}>
+            戻る
+          </Btn>
+        </>
+      ) : (
+        <>
+          <Btn onClick={handleAdd}>メモを追加する</Btn>
+          {memo &&
+            memo.map((memo) => {
+              return (
+                <a href={`detail/${memo.id}`} key={memo.id}>
+                  title: {memo.title}
+                  <br />
+                  content: {memo.content}
+                  <br />
+                  updateDate:
+                  {memo.updateDate &&
+                    format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
+                  <br />
+                  isPinned: {memo.isPinned ? 'true' : 'false'}
+                  <br />
+                </a>
+              )
+            })}
+        </>
+      )}
+    </Wrapper>
   )
 }
-
-const Title = styled.h1`
-  color: red;
-  font-size: 50px;
-`
-
-const TitleInput = styled.input``
-
-const Textarea = styled.textarea``
-
-const SubmitBtn = styled.button``
