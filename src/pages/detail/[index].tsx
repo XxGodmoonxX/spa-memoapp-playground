@@ -6,6 +6,7 @@ import { Btn } from '../../components/atoms/btn'
 import { CheckBox } from '../../components/atoms/checkbox'
 import { Text } from '../../components/atoms/text'
 import { Textarea } from '../../components/atoms/textArea'
+import { Title } from '../../components/atoms/title'
 import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
 import { Wrapper } from '../../components/organisms/wrapper'
@@ -94,6 +95,8 @@ export default function Detail() {
 
   return (
     <Wrapper>
+      <Title>メモ詳細</Title>
+
       {memo &&
         (editing ? (
           <>

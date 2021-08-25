@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   margin: auto;
 
   > button {
-    margin: 40px auto auto;
+    margin: 40px auto 40px;
     display: block;
   }
 `
