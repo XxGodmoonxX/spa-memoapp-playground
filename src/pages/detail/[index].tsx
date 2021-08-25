@@ -25,7 +25,7 @@ export default function Detail() {
         setExisted(true)
         setMemo(item)
       } else {
-        router.push('/')
+        router.push('/404')
       }
     }
   }, [index, editing])
@@ -39,7 +39,7 @@ export default function Detail() {
     console.log('handleSubmit')
 
     if (!memo) {
-      router.push('/')
+      router.push('/404')
       return
     }
 
@@ -73,7 +73,7 @@ export default function Detail() {
       const item: Memo[] = storage ? JSON.parse(storage) : null
       const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-      router.push('/')
+      router.push('/404')
     }
   }
 
