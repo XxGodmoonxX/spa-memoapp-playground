@@ -21,6 +21,11 @@ const Container = styled.button<Pick<Props, 'action'>>`
   width: 200px;
   height: 36px;
   cursor: pointer;
+  transition: opacity 0.4s;
+
+  &:hover {
+    opacity: 0.6;
+  }
 
   ${(props) =>
     props.action === 'delete'
@@ -33,5 +38,5 @@ const Container = styled.button<Pick<Props, 'action'>>`
           background-color: white;
           color: black;
           border: 1px solid black;
-        `}
+        `};
 `
