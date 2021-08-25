@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export default function Home(): JSX.Element {
+export default function Home() {
   return <Title>My page</Title>
 }
 
