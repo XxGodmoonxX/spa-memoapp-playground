@@ -4,8 +4,10 @@ import { useEffect, useState, useRef } from 'react'
 import { Memo } from '../'
 import { Btn } from '../../components/atoms/btn'
 import { CheckBox } from '../../components/atoms/checkbox'
+import { Text } from '../../components/atoms/text'
 import { Textarea } from '../../components/atoms/textArea'
 import { TitleInput } from '../../components/atoms/titleInput'
+import { FormWrapper } from '../../components/molecules/formWrapper'
 import { Wrapper } from '../../components/organisms/wrapper'
 import { STORAGE_KEY } from '../../constants'
 
@@ -88,30 +90,25 @@ export default function Detail() {
 
   return (
     <Wrapper>
-      {index}
-      <br />
       {memo &&
         (editing ? (
-          <form name="form">
-            title:
+          <FormWrapper>
+            <Text>タイトル</Text>
             <TitleInput inputRef={titleRef} defaultValue={memo.title} />
-            <br />
-            content:
+            <Text>内容</Text>
             <Textarea ref={textareeRef} defaultValue={memo.content} />
-            <br />
             <CheckBox
               checkboxRef={checkboxRef}
               defaultChecked={memo.isPinned}
+              labelText="ピン留めする"
             />
-            <br />
-            <Btn action="delete" onClick={handleSubmitDelete}>
-              delete
-            </Btn>
             <Btn action="submit" onClick={handleSubmit}>
-              Submit
+              上記内容でメモを更新する
             </Btn>
-            <br />
-          </form>
+            <Btn action="delete" onClick={handleSubmitDelete}>
+              メモを削除する
+            </Btn>
+          </FormWrapper>
         ) : (
           <>
             title: {memo.title}
@@ -124,7 +121,7 @@ export default function Detail() {
             isPinned: {memo.isPinned ? 'true' : 'false'}
             <br />
             <Btn action="edit" onClick={handleClickEdit}>
-              Edit
+              メモを編集する
             </Btn>
           </>
         ))}

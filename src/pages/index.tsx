@@ -2,8 +2,10 @@ import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Btn } from '../components/atoms/btn'
+import { Text } from '../components/atoms/text'
 import { Textarea } from '../components/atoms/textArea'
 import { TitleInput } from '../components/atoms/titleInput'
+import { FormWrapper } from '../components/molecules/formWrapper'
 import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../constants'
 
@@ -73,8 +75,6 @@ export default function Home() {
         memo.map((memo) => {
           return (
             <a href={`detail/${memo.id}`} key={memo.id}>
-              id:{memo.id}
-              <br />
               title: {memo.title}
               <br />
               content: {memo.content}
@@ -89,15 +89,15 @@ export default function Home() {
           )
         })}
       <br />
-      <form name="form">
+      <FormWrapper>
+        <Text>タイトル</Text>
         <TitleInput inputRef={titleRef} />
-        <br />
+        <Text>内容</Text>
         <Textarea ref={textareeRef} />
-        <br />
         <Btn action="submit" onClick={handleSubmit}>
-          Submit
+          上記内容でメモを追加
         </Btn>
-      </form>
+      </FormWrapper>
     </Wrapper>
   )
 }

@@ -12,4 +12,6 @@ export const TitleInput: React.VFC<Props> = (props) => {
   return <Container ref={inputRef} type="text" defaultValue={defaultValue} />
 }
 
-export const Container = styled.input``
+const Container = styled.input`
+  width: 100%;
+`

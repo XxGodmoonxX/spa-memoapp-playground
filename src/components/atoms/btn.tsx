@@ -18,23 +18,29 @@ export const Btn: React.VFC<Props> = (props) => {
 }
 
 const Container = styled.button<Pick<Props, 'action'>>`
-  color: white;
+  width: 200px;
+  height: 36px;
+  cursor: pointer;
 
   ${(props) =>
     props.action === 'delete' &&
     css`
-      background-color: red;
+      background-color: #f54e4e;
+      color: white;
+      border: none;
     `}
-
   ${(props) =>
     props.action === 'edit' &&
     css`
-      background-color: green;
+      background-color: white;
+      color: black;
+      border: 1px solid black;
     `}
-
     ${(props) =>
     props.action === 'submit' &&
     css`
-      background-color: blue;
-    `}
+      background-color: white;
+      color: black;
+      border: 1px solid black;
+    `};
 `
