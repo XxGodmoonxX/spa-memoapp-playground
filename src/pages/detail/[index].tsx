@@ -35,7 +35,13 @@ export default function Detail() {
   const handleSubmit = () => {
     console.log('handleSubmit')
 
+    if (!memo) {
+      router.push('/')
+      return
+    }
+
     const currentMemo: Memo = {
+      id: memo?.id,
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
@@ -47,6 +53,18 @@ export default function Detail() {
     item.splice(Number(index), 1, currentMemo)
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...item]))
     setEditng(!editing)
+  }
+
+  const handleSubmitDelete = (e: InputEvent) => {
+    console.log('handleSubmitDelete')
+
+    const storage = localStorage.getItem(STORAGE_KEY)
+    const item: Memo[] = storage ? JSON.parse(storage) : null
+    const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
+    console.log(newItem)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
+
+    // router.push('/')
   }
 
   return (
@@ -72,6 +90,9 @@ export default function Detail() {
               defaultChecked={memo.isPinned}
             />
             <br />
+            <DeleteBtn type="button" onClick={handleSubmitDelete}>
+              delete
+            </DeleteBtn>
             <SubmitBtn type="submit" onClick={handleSubmit}>
               Submit
             </SubmitBtn>
@@ -104,3 +125,5 @@ const Textarea = styled.textarea``
 const CheckBox = styled.input``
 
 const SubmitBtn = styled.button``
+
+const DeleteBtn = styled.button``

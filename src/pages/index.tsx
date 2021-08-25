@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { STORAGE_KEY } from '../constants'
 
 export type Memo = {
+  id: number
   title: string | undefined
   content: string | undefined
   updateDate: number | undefined
@@ -24,6 +25,7 @@ export default function Home() {
     console.log('handleSubmit')
 
     const currentMemo: Memo = {
+      id: memo?.length ? memo?.length : 0,
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
@@ -44,7 +46,9 @@ export default function Home() {
       {memo &&
         memo.map((memo, index) => {
           return (
-            <a href={`detail/${index}`} key={index}>
+            <a href={`detail/${memo.id}`} key={index}>
+              id:{memo.id}
+              <br />
               title: {memo.title}
               <br />
               content: {memo.content}
