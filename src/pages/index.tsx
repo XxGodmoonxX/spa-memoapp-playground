@@ -23,9 +23,19 @@ export default function Home() {
       return
     }
 
-    list.sort((a, b) => {
-      return b.updateDate - a.updateDate
-    })
+    list
+      .sort((a, b) => {
+        return b.updateDate - a.updateDate
+      })
+      .sort((a, b) => {
+        if (!a.isPinned && b.isPinned) {
+          return 1
+        } else if (a.isPinned && !b.isPinned) {
+          return -1
+        } else {
+          return 0
+        }
+      })
 
     setMemo(list ? list : undefined)
   }, [])
