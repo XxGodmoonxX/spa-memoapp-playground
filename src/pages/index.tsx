@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import styled from 'styled-components'
 import { Btn } from '../components/atoms/btn'
 import { Text } from '../components/atoms/text'
 import { Textarea } from '../components/atoms/textArea'
@@ -16,6 +17,7 @@ export default function Home() {
   const textareeRef = useRef<HTMLTextAreaElement>(null)
   const [adding, setAdding] = useState<boolean>(false)
 
+  // NOTE: 現在のメモ一覧を取得しソートしてstateに入れる
   useEffect(() => {
     const storage = getStorage('spa-memoapp-playground')
     const list: Memo[] | null = storage ? JSON.parse(storage) : null
@@ -24,9 +26,11 @@ export default function Home() {
     }
 
     list
+      // NOTE: 更新日時で降順
       .sort((a, b) => {
         return b.updateDate - a.updateDate
       })
+      // NOTE: ピン留めされたメモが優先で表示
       .sort((a, b) => {
         if (!a.isPinned && b.isPinned) {
           return 1
@@ -42,8 +46,10 @@ export default function Home() {
 
   const handleSubmit = () => {
     const storage = getStorage('spa-memoapp-playground')
+    /** 現在のメモ一覧 */
     const list: Memo[] | null = storage ? JSON.parse(storage) : null
 
+    /** 新規で作るメモ */
     const currentMemo: Memo = {
       id: list?.length ? list[list?.length - 1].id + 1 : 0,
       title: titleRef.current?.value,
@@ -52,6 +58,7 @@ export default function Home() {
       isPinned: false
     }
 
+    /** 更新後のメモ一覧 */
     const newMemo = list ? [...list, currentMemo] : [currentMemo]
     setStorage('spa-memoapp-playground', JSON.stringify(newMemo))
 
@@ -87,7 +94,9 @@ export default function Home() {
         </>
       ) : (
         <>
-          <Btn onClick={handleAdd}>メモを追加する</Btn>
+          <BtnContainer>
+            <Btn onClick={handleAdd}>メモを追加する</Btn>
+          </BtnContainer>
           {memo &&
             memo.map((memo) => {
               return (
@@ -103,3 +112,9 @@ export default function Home() {
     </Wrapper>
   )
 }
+
+const BtnContainer = styled.div`
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+`

@@ -25,9 +25,8 @@ export default function Detail() {
 
   useEffect(() => {
     if (index) {
-      console.log(`index = ${index}`)
-
       const storage = getStorage('spa-memoapp-playground')
+      /** メモ詳細で見たいものと合致するメモを一覧から取る */
       const item: Memo | null = storage
         ? JSON.parse(storage).filter(
             (item: Memo) => item.id === Number(index)
@@ -51,6 +50,7 @@ export default function Detail() {
       return
     }
 
+    /** 更新するメモの中身 */
     const currentMemo: Memo = {
       id: memo?.id,
       title: titleRef.current?.value,
@@ -60,7 +60,9 @@ export default function Detail() {
     }
 
     const storage = getStorage('spa-memoapp-playground')
+    /** 現在のメモ一覧 */
     const items: Memo[] = storage ? JSON.parse(storage) : null
+    /** 更新後のメモ一覧 */
     const newItems = items.map((item) => {
       if (item.id === memo.id) {
         return currentMemo
@@ -78,7 +80,9 @@ export default function Detail() {
 
     if (result) {
       const storage = getStorage('spa-memoapp-playground')
+      /** 現在のメモ一覧 */
       const item: Memo[] = storage ? JSON.parse(storage) : null
+      /** 削除後のメモ一覧 */
       const newItem = item.filter((item) => Number(index) !== item.id)
       setStorage('spa-memoapp-playground', JSON.stringify([...newItem]))
       router.push(PATH.HOME)
