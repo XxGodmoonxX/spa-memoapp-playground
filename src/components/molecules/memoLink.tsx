@@ -16,11 +16,15 @@ type Props = {
   memo: Memo
   /** タイトルと内容が全て表示される */
   isDetail?: boolean
+  /**
+   * リンク先
+   * リンク先がある場合のみホバー時のインタラクションが発生する
+   */
   href?: string
 }
 
 /**
- *
+ * メモを表示するコンポーネント
  */
 export const MemoLink: React.VFC<Props> = (props) => {
   const { memo, isDetail, href } = props
