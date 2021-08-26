@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
-import { Memo } from '../'
+import styled from 'styled-components'
 import { Btn } from '../../components/atoms/btn'
 import { CheckBox } from '../../components/atoms/checkbox'
 import { Text } from '../../components/atoms/text'
@@ -8,9 +8,14 @@ import { Textarea } from '../../components/atoms/textArea'
 import { Title } from '../../components/atoms/title'
 import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
-import { MemoLink } from '../../components/molecules/memoLink'
+import {
+  MemoLink,
+  Memo,
+  getMemoList
+} from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
-import { STORAGE_KEY } from '../../constants'
+import { PATH } from '../../utils/routes'
+import { getStorage, setStorage } from '../../utils/storage'
 
 export default function Detail() {
   const router = useRouter()
@@ -24,9 +29,8 @@ export default function Detail() {
 
   useEffect(() => {
     if (index) {
-      console.log(`index = ${index}`)
-
-      const storage = localStorage.getItem(STORAGE_KEY)
+      const storage = getStorage('spa-memoapp-playground')
+      /** メモ詳細で見たいものと合致するメモを一覧から取る */
       const item: Memo | null = storage
         ? JSON.parse(storage).filter(
             (item: Memo) => item.id === Number(index)
@@ -36,23 +40,21 @@ export default function Detail() {
         setExisted(true)
         setMemo(item)
       } else {
-        router.push('/404')
+        router.push(PATH.NOTFOUND)
       }
     }
   }, [index, editing])
 
   const handleClickEdit = () => {
-    console.log('handleClickEdit')
     setEditng(!editing)
   }
 
   const handleSubmit = () => {
-    console.log('handleSubmit')
-
     if (!memo) {
       return
     }
 
+    /** 更新するメモの中身 */
     const currentMemo: Memo = {
       id: memo?.id,
       title: titleRef.current?.value,
@@ -61,8 +63,12 @@ export default function Detail() {
       isPinned: checkboxRef.current?.checked ? true : false
     }
 
-    const storage = localStorage.getItem(STORAGE_KEY)
-    const items: Memo[] = storage ? JSON.parse(storage) : null
+    /** 現在のメモ一覧 */
+    const items: Memo[] | null = getMemoList()
+    if (!items) {
+      return
+    }
+    /** 更新後のメモ一覧 */
     const newItems = items.map((item) => {
       if (item.id === memo.id) {
         return currentMemo
@@ -70,22 +76,24 @@ export default function Detail() {
 
       return item
     })
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItems]))
+
+    setStorage('spa-memoapp-playground', JSON.stringify([...newItems]))
     setEditng(!editing)
   }
 
   const handleSubmitDelete = () => {
-    console.log('handleSubmitDelete')
     const result = confirm('削除いたしますか？')
 
     if (result) {
-      const storage = localStorage.getItem(STORAGE_KEY)
-      const item: Memo[] = storage ? JSON.parse(storage) : null
-      const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-      router.push('/')
-    } else {
-      setEditng(!editing)
+      /** 現在のメモ一覧 */
+      const item: Memo[] | null = getMemoList()
+      if (!item) {
+        return
+      }
+      /** 削除後のメモ一覧 */
+      const newItem = item.filter((item) => Number(index) !== item.id)
+      setStorage('spa-memoapp-playground', JSON.stringify([...newItem]))
+      router.push(PATH.HOME)
     }
   }
 
@@ -127,12 +135,26 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <MemoLink memo={memo} isDetail />
+            <Container>
+              <MemoLink memo={memo} isDetail />
+            </Container>
             <Btn action="edit" onClick={handleClickEdit}>
               メモを編集する
+            </Btn>
+            <Btn
+              action="back"
+              onClick={() => {
+                router.push(PATH.HOME)
+              }}
+            >
+              一覧へ戻る
             </Btn>
           </>
         ))}
     </Wrapper>
   )
 }
+
+const Container = styled.div`
+  margin-top: 40px;
+`

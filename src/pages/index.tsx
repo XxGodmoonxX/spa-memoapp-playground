@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Btn } from '../components/atoms/btn'
@@ -7,17 +6,10 @@ import { Textarea } from '../components/atoms/textArea'
 import { Title } from '../components/atoms/title'
 import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
-import { MemoLink } from '../components/molecules/memoLink'
+import { MemoLink, Memo, getMemoList } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
-import { STORAGE_KEY } from '../constants'
-
-export type Memo = {
-  id: number
-  title: string | undefined
-  content: string | undefined
-  updateDate: number
-  isPinned: boolean
-}
+import { PATH } from '../utils/routes'
+import { setStorage } from '../utils/storage'
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
@@ -25,17 +17,19 @@ export default function Home() {
   const textareeRef = useRef<HTMLTextAreaElement>(null)
   const [adding, setAdding] = useState<boolean>(false)
 
+  // NOTE: 現在のメモ一覧を取得しソートしてstateに入れる
   useEffect(() => {
-    const storage = localStorage.getItem(STORAGE_KEY)
-    const list: Memo[] | null = storage ? JSON.parse(storage) : null
+    const list: Memo[] | null = getMemoList()
     if (!list) {
       return
     }
 
     list
+      // NOTE: 更新日時で降順
       .sort((a, b) => {
         return b.updateDate - a.updateDate
       })
+      // NOTE: ピン留めされたメモが優先で表示
       .sort((a, b) => {
         if (!a.isPinned && b.isPinned) {
           return 1
@@ -47,28 +41,25 @@ export default function Home() {
       })
 
     setMemo(list ? list : undefined)
-  }, [])
+  }, [adding])
 
   const handleSubmit = () => {
-    console.log('handleSubmit')
+    /** 現在のメモ一覧 */
+    const list: Memo[] | null = getMemoList()
 
-    const storage = localStorage.getItem(STORAGE_KEY)
-    const list: Memo[] | null = storage ? JSON.parse(storage) : null
-
+    /** 新規で作るメモ */
     const currentMemo: Memo = {
-      id: list?.length ? list?.length : 0,
+      id: list?.length ? list[list?.length - 1].id + 1 : 0,
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
       isPinned: false
     }
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(list ? [...list, currentMemo] : [currentMemo])
-    )
+    /** 更新後のメモ一覧 */
+    const newMemo = list ? [...list, currentMemo] : [currentMemo]
+    setStorage('spa-memoapp-playground', JSON.stringify(newMemo))
 
-    setMemo(storage ? JSON.parse(storage) : null)
     setAdding(false)
   }
 
@@ -101,14 +92,16 @@ export default function Home() {
         </>
       ) : (
         <>
-          <Btn onClick={handleAdd}>メモを追加する</Btn>
+          <BtnContainer>
+            <Btn onClick={handleAdd}>メモを追加する</Btn>
+          </BtnContainer>
           {memo &&
             memo.map((memo) => {
               return (
                 <MemoLink
                   memo={memo}
                   key={memo.id}
-                  href={`detail/${memo.id}`}
+                  href={`${PATH.DETAIL}/${memo.id}`}
                 />
               )
             })}
@@ -117,3 +110,9 @@ export default function Home() {
     </Wrapper>
   )
 }
+
+const BtnContainer = styled.div`
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+`

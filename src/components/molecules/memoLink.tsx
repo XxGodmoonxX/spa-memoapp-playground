@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { getStorage } from '../../utils/storage'
 import { Text } from '../atoms/text'
 
 export type Memo = {
@@ -11,16 +12,29 @@ export type Memo = {
   isPinned: boolean
 }
 
+/** 現在のメモ一覧 */
+export const getMemoList = (): Memo[] | null => {
+  const storage = getStorage('spa-memoapp-playground')
+  /** 現在のメモ一覧 */
+  const items: Memo[] | null = storage ? JSON.parse(storage) : null
+
+  return items
+}
+
 type Props = {
   /**  */
   memo: Memo
   /** タイトルと内容が全て表示される */
   isDetail?: boolean
+  /**
+   * リンク先
+   * リンク先がある場合のみホバー時のインタラクションが発生する
+   */
   href?: string
 }
 
 /**
- *
+ * メモを表示するコンポーネント
  */
 export const MemoLink: React.VFC<Props> = (props) => {
   const { memo, isDetail, href } = props
@@ -46,7 +60,7 @@ const Container = styled.a<Pick<Props, 'href'>>`
   border: 1px solid black;
   display: block;
   color: black;
-  padding: 20px 40px 40px;
+  padding: 40px;
   box-sizing: border-box;
   position: relative;
 
@@ -60,7 +74,6 @@ const Container = styled.a<Pick<Props, 'href'>>`
       }
     `}
 
-
   & + & {
     margin-top: 20px;
   }
@@ -72,7 +85,10 @@ const Container = styled.a<Pick<Props, 'href'>>`
 
 const Heading = styled.h2`
   font-size: 22px;
-  margin: 20px 0 0;
+
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
 `
 
 const PinImg = styled.img`
