@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
+import styled from 'styled-components'
 import { Btn } from '../../components/atoms/btn'
 import { CheckBox } from '../../components/atoms/checkbox'
 import { Text } from '../../components/atoms/text'
@@ -10,6 +11,7 @@ import { FormWrapper } from '../../components/molecules/formWrapper'
 import { MemoLink, Memo } from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
 import { STORAGE_KEY } from '../../utils/constants'
+import { PATH } from '../../utils/routes'
 
 export default function Detail() {
   const router = useRouter()
@@ -35,7 +37,7 @@ export default function Detail() {
         setExisted(true)
         setMemo(item)
       } else {
-        router.push('/404')
+        router.push(PATH.NOTFOUND)
       }
     }
   }, [index, editing])
@@ -126,12 +128,26 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <MemoLink memo={memo} isDetail />
+            <Container>
+              <MemoLink memo={memo} isDetail />
+            </Container>
             <Btn action="edit" onClick={handleClickEdit}>
               メモを編集する
+            </Btn>
+            <Btn
+              action="back"
+              onClick={() => {
+                router.push(PATH.HOME)
+              }}
+            >
+              一覧へ戻る
             </Btn>
           </>
         ))}
     </Wrapper>
   )
 }
+
+const Container = styled.div`
+  margin-top: 40px;
+`

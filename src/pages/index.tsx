@@ -8,6 +8,7 @@ import { FormWrapper } from '../components/molecules/formWrapper'
 import { MemoLink, Memo } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../utils/constants'
+import { PATH } from '../utils/routes'
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
@@ -98,7 +99,7 @@ export default function Home() {
                 <MemoLink
                   memo={memo}
                   key={memo.id}
-                  href={`detail/${memo.id}`}
+                  href={`${PATH.DETAIL}/${memo.id}`}
                 />
               )
             })}
