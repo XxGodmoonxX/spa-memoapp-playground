@@ -104,7 +104,13 @@ export default function Home() {
           <Btn onClick={handleAdd}>メモを追加する</Btn>
           {memo &&
             memo.map((memo) => {
-              return <MemoLink memo={memo} key={memo.id} />
+              return (
+                <MemoLink
+                  memo={memo}
+                  key={memo.id}
+                  href={`detail/${memo.id}`}
+                />
+              )
             })}
         </>
       )}

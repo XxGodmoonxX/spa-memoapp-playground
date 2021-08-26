@@ -27,7 +27,11 @@ export default function Detail() {
       console.log(`index = ${index}`)
 
       const storage = localStorage.getItem(STORAGE_KEY)
-      const item: Memo = storage ? JSON.parse(storage)[Number(index)] : null
+      const item: Memo | null = storage
+        ? JSON.parse(storage).filter(
+            (item: Memo) => item.id === Number(index)
+          )[0]
+        : null
       if (item) {
         setExisted(true)
         setMemo(item)
@@ -123,7 +127,7 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <MemoLink memo={memo} isLink={false} />
+            <MemoLink memo={memo} isDetail />
             <Btn action="edit" onClick={handleClickEdit}>
               メモを編集する
             </Btn>
