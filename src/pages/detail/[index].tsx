@@ -10,8 +10,8 @@ import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
 import { MemoLink, Memo } from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
-import { STORAGE_KEY } from '../../utils/constants'
 import { PATH } from '../../utils/routes'
+import { getStorage, setStorage } from '../../utils/storage'
 
 export default function Detail() {
   const router = useRouter()
@@ -27,7 +27,7 @@ export default function Detail() {
     if (index) {
       console.log(`index = ${index}`)
 
-      const storage = localStorage.getItem(STORAGE_KEY)
+      const storage = getStorage('spa-memoapp-playground')
       const item: Memo | null = storage
         ? JSON.parse(storage).filter(
             (item: Memo) => item.id === Number(index)
@@ -43,13 +43,10 @@ export default function Detail() {
   }, [index, editing])
 
   const handleClickEdit = () => {
-    console.log('handleClickEdit')
     setEditng(!editing)
   }
 
   const handleSubmit = () => {
-    console.log('handleSubmit')
-
     if (!memo) {
       return
     }
@@ -62,7 +59,7 @@ export default function Detail() {
       isPinned: checkboxRef.current?.checked ? true : false
     }
 
-    const storage = localStorage.getItem(STORAGE_KEY)
+    const storage = getStorage('spa-memoapp-playground')
     const items: Memo[] = storage ? JSON.parse(storage) : null
     const newItems = items.map((item) => {
       if (item.id === memo.id) {
@@ -71,7 +68,8 @@ export default function Detail() {
 
       return item
     })
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItems]))
+
+    setStorage('spa-memoapp-playground', JSON.stringify([...newItems]))
     setEditng(!editing)
   }
 
@@ -79,10 +77,10 @@ export default function Detail() {
     const result = confirm('削除いたしますか？')
 
     if (result) {
-      const storage = localStorage.getItem(STORAGE_KEY)
+      const storage = getStorage('spa-memoapp-playground')
       const item: Memo[] = storage ? JSON.parse(storage) : null
       const newItem = item.filter((item) => Number(index) !== item.id)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
+      setStorage('spa-memoapp-playground', JSON.stringify([...newItem]))
       router.push(PATH.HOME)
     }
   }

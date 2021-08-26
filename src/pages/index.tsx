@@ -7,8 +7,8 @@ import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
 import { MemoLink, Memo } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
-import { STORAGE_KEY } from '../utils/constants'
 import { PATH } from '../utils/routes'
+import { getStorage, setStorage } from '../utils/storage'
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
@@ -17,7 +17,7 @@ export default function Home() {
   const [adding, setAdding] = useState<boolean>(false)
 
   useEffect(() => {
-    const storage = localStorage.getItem(STORAGE_KEY)
+    const storage = getStorage('spa-memoapp-playground')
     const list: Memo[] | null = storage ? JSON.parse(storage) : null
     if (!list) {
       return
@@ -41,7 +41,7 @@ export default function Home() {
   }, [adding])
 
   const handleSubmit = () => {
-    const storage = localStorage.getItem(STORAGE_KEY)
+    const storage = getStorage('spa-memoapp-playground')
     const list: Memo[] | null = storage ? JSON.parse(storage) : null
 
     const currentMemo: Memo = {
@@ -53,7 +53,7 @@ export default function Home() {
     }
 
     const newMemo = list ? [...list, currentMemo] : [currentMemo]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newMemo))
+    setStorage('spa-memoapp-playground', JSON.stringify(newMemo))
 
     setAdding(false)
   }
