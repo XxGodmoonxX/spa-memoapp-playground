@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Text } from '../atoms/text'
 
 export type Memo = {
@@ -14,17 +14,18 @@ export type Memo = {
 type Props = {
   memo: Memo
   isLink?: boolean
+  isDetail?: boolean
 }
 
 export const MemoLink: React.VFC<Props> = (props) => {
-  const { memo, isLink = true } = props
+  const { memo, isLink = true, isDetail } = props
 
   return (
     <Container {...(isLink && { href: `detail/${memo.id}`, target: '_blank' })}>
       <Heading>タイトル</Heading>
       <Text>{memo.title}</Text>
       <Heading>内容</Heading>
-      <Text>{memo.content}</Text>
+      <ContentText isDetail={isDetail}>{memo.content}</ContentText>
       <Heading>更新日時</Heading>
       <Text>
         {memo.updateDate && format(memo?.updateDate, 'yyyy/MM/dd kk:mm:ss')}
@@ -74,4 +75,19 @@ const PinImg = styled.img`
   right: 8px;
   width: 40px;
   height: auto;
+`
+
+export const ContentText = styled.p<Pick<Props, 'isDetail'>>`
+  font-size: 14px;
+
+  ${(props) =>
+    props.isDetail
+      ? css`
+          overflow-wrap: anywhere;
+        `
+      : css`
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        `}
 `
