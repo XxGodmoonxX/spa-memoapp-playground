@@ -6,10 +6,10 @@ import { Textarea } from '../components/atoms/textArea'
 import { Title } from '../components/atoms/title'
 import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
-import { MemoLink, Memo } from '../components/molecules/memoLink'
+import { MemoLink, Memo, getMemoList } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
 import { PATH } from '../utils/routes'
-import { getStorage, setStorage } from '../utils/storage'
+import { setStorage } from '../utils/storage'
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
@@ -19,8 +19,7 @@ export default function Home() {
 
   // NOTE: 現在のメモ一覧を取得しソートしてstateに入れる
   useEffect(() => {
-    const storage = getStorage('spa-memoapp-playground')
-    const list: Memo[] | null = storage ? JSON.parse(storage) : null
+    const list: Memo[] | null = getMemoList()
     if (!list) {
       return
     }
@@ -45,9 +44,8 @@ export default function Home() {
   }, [adding])
 
   const handleSubmit = () => {
-    const storage = getStorage('spa-memoapp-playground')
     /** 現在のメモ一覧 */
-    const list: Memo[] | null = storage ? JSON.parse(storage) : null
+    const list: Memo[] | null = getMemoList()
 
     /** 新規で作るメモ */
     const currentMemo: Memo = {

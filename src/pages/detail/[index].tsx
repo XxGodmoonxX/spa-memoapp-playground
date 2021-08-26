@@ -8,7 +8,11 @@ import { Textarea } from '../../components/atoms/textArea'
 import { Title } from '../../components/atoms/title'
 import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
-import { MemoLink, Memo } from '../../components/molecules/memoLink'
+import {
+  MemoLink,
+  Memo,
+  getMemoList
+} from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
 import { PATH } from '../../utils/routes'
 import { getStorage, setStorage } from '../../utils/storage'
@@ -59,9 +63,11 @@ export default function Detail() {
       isPinned: checkboxRef.current?.checked ? true : false
     }
 
-    const storage = getStorage('spa-memoapp-playground')
     /** 現在のメモ一覧 */
-    const items: Memo[] = storage ? JSON.parse(storage) : null
+    const items: Memo[] | null = getMemoList()
+    if (!items) {
+      return
+    }
     /** 更新後のメモ一覧 */
     const newItems = items.map((item) => {
       if (item.id === memo.id) {
@@ -79,9 +85,11 @@ export default function Detail() {
     const result = confirm('削除いたしますか？')
 
     if (result) {
-      const storage = getStorage('spa-memoapp-playground')
       /** 現在のメモ一覧 */
-      const item: Memo[] = storage ? JSON.parse(storage) : null
+      const item: Memo[] | null = getMemoList()
+      if (!item) {
+        return
+      }
       /** 削除後のメモ一覧 */
       const newItem = item.filter((item) => Number(index) !== item.id)
       setStorage('spa-memoapp-playground', JSON.stringify([...newItem]))

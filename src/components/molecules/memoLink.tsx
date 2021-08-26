@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { getStorage } from '../../utils/storage'
 import { Text } from '../atoms/text'
 
 export type Memo = {
@@ -9,6 +10,15 @@ export type Memo = {
   content: string | undefined
   updateDate: number
   isPinned: boolean
+}
+
+/** 現在のメモ一覧 */
+export const getMemoList = (): Memo[] | null => {
+  const storage = getStorage('spa-memoapp-playground')
+  /** 現在のメモ一覧 */
+  const items: Memo[] | null = storage ? JSON.parse(storage) : null
+
+  return items
 }
 
 type Props = {
