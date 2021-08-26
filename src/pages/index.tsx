@@ -7,7 +7,7 @@ import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
 import { MemoLink } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
-import { STORAGE_KEY } from '../constants'
+import { STORAGE_KEY } from '../utils/constants'
 
 export type Memo = {
   id: number
