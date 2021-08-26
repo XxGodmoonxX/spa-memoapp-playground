@@ -1,6 +1,4 @@
-import { format } from 'date-fns'
 import { useState, useRef, useEffect } from 'react'
-import styled from 'styled-components'
 import { Btn } from '../components/atoms/btn'
 import { Text } from '../components/atoms/text'
 import { Textarea } from '../components/atoms/textArea'
