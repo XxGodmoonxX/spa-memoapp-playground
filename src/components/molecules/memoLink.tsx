@@ -45,7 +45,6 @@ const Container = styled.a<Pick<Props, 'href'>>`
   width: 100%;
   border: 1px solid black;
   display: block;
-  text-decoration: none;
   color: black;
   padding: 20px 40px 40px;
   box-sizing: border-box;
@@ -61,9 +60,6 @@ const Container = styled.a<Pick<Props, 'href'>>`
       }
     `}
 
-  &:active {
-    color: black;
-  }
 
   & + & {
     margin-top: 20px;
