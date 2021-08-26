@@ -1,5 +1,3 @@
-// import { STORAGE_KEY } from '../../utils/constants'
-import { STORAGE_KEY } from '@/utils/constants'
 import { useRouter } from 'next/router'
 import { useEffect, useState, useRef } from 'react'
 import { Memo } from '../'
@@ -12,6 +10,7 @@ import { TitleInput } from '../../components/atoms/titleInput'
 import { FormWrapper } from '../../components/molecules/formWrapper'
 import { MemoLink } from '../../components/molecules/memoLink'
 import { Wrapper } from '../../components/organisms/wrapper'
+import { STORAGE_KEY } from '../../utils/constants'
 
 export default function Detail() {
   const router = useRouter()
