@@ -123,7 +123,7 @@ export default function Detail() {
           </>
         ) : (
           <>
-            <MemoLink memo={memo} isLink={false} isDetail />
+            <MemoLink memo={memo} isDetail />
             <Btn action="edit" onClick={handleClickEdit}>
               メモを編集する
             </Btn>

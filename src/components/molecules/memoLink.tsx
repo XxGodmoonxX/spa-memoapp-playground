@@ -12,18 +12,23 @@ export type Memo = {
 }
 
 type Props = {
+  /**  */
   memo: Memo
-  isLink?: boolean
+  /** タイトルと内容が全て表示される */
   isDetail?: boolean
+  href?: string
 }
 
+/**
+ *
+ */
 export const MemoLink: React.VFC<Props> = (props) => {
-  const { memo, isLink = true, isDetail } = props
+  const { memo, isDetail, href } = props
 
   return (
-    <Container {...(isLink && { href: `detail/${memo.id}`, target: '_blank' })}>
+    <Container href={href}>
       <Heading>タイトル</Heading>
-      <Text>{memo.title}</Text>
+      <ContentTitle isDetail={isDetail}>{memo.title}</ContentTitle>
       <Heading>内容</Heading>
       <ContentText isDetail={isDetail}>{memo.content}</ContentText>
       <Heading>更新日時</Heading>
@@ -36,7 +41,7 @@ export const MemoLink: React.VFC<Props> = (props) => {
   )
 }
 
-const Container = styled.a`
+const Container = styled.a<Pick<Props, 'href'>>`
   width: 100%;
   border: 1px solid black;
   display: block;
@@ -45,11 +50,16 @@ const Container = styled.a`
   padding: 20px 40px 40px;
   box-sizing: border-box;
   position: relative;
-  transition: opacity 0.4s;
 
-  &:hover {
-    opacity: 0.6;
-  }
+  ${(props) =>
+    props.href &&
+    css`
+      transition: opacity 0.4s;
+
+      &:hover {
+        opacity: 0.6;
+      }
+    `}
 
   &:active {
     color: black;
@@ -65,16 +75,31 @@ const Container = styled.a`
 `
 
 const Heading = styled.h2`
-  font-size: 18px;
+  font-size: 22px;
   margin: 20px 0 0;
 `
 
 const PinImg = styled.img`
   position: absolute;
-  bottom: 8px;
+  top: 8px;
   right: 8px;
-  width: 40px;
+  width: 30px;
   height: auto;
+`
+
+export const ContentTitle = styled.p<Pick<Props, 'isDetail'>>`
+  font-size: 20px;
+
+  ${(props) =>
+    props.isDetail
+      ? css`
+          overflow-wrap: anywhere;
+        `
+      : css`
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        `}
 `
 
 export const ContentText = styled.p<Pick<Props, 'isDetail'>>`
