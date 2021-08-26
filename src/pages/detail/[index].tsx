@@ -85,8 +85,6 @@ export default function Detail() {
       const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
       router.push('/')
-    } else {
-      setEditng(!editing)
     }
   }
 
