@@ -5,17 +5,9 @@ import { Textarea } from '../components/atoms/textArea'
 import { Title } from '../components/atoms/title'
 import { TitleInput } from '../components/atoms/titleInput'
 import { FormWrapper } from '../components/molecules/formWrapper'
-import { MemoLink } from '../components/molecules/memoLink'
+import { MemoLink, Memo } from '../components/molecules/memoLink'
 import { Wrapper } from '../components/organisms/wrapper'
 import { STORAGE_KEY } from '../utils/constants'
-
-export type Memo = {
-  id: number
-  title: string | undefined
-  content: string | undefined
-  updateDate: number
-  isPinned: boolean
-}
 
 export default function Home() {
   const [memo, setMemo] = useState<Memo[]>()
