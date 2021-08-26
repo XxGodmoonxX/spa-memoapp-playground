@@ -76,15 +76,14 @@ export default function Detail() {
   }
 
   const handleSubmitDelete = () => {
-    console.log('handleSubmitDelete')
     const result = confirm('削除いたしますか？')
 
     if (result) {
       const storage = localStorage.getItem(STORAGE_KEY)
       const item: Memo[] = storage ? JSON.parse(storage) : null
-      const newItem = item.filter((_, itemIndex) => Number(index) !== itemIndex)
+      const newItem = item.filter((item) => Number(index) !== item.id)
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...newItem]))
-      router.push('/')
+      router.push(PATH.HOME)
     }
   }
 

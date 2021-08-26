@@ -38,28 +38,23 @@ export default function Home() {
       })
 
     setMemo(list ? list : undefined)
-  }, [])
+  }, [adding])
 
   const handleSubmit = () => {
-    console.log('handleSubmit')
-
     const storage = localStorage.getItem(STORAGE_KEY)
     const list: Memo[] | null = storage ? JSON.parse(storage) : null
 
     const currentMemo: Memo = {
-      id: list?.length ? list?.length : 0,
+      id: list?.length ? list[list?.length - 1].id + 1 : 0,
       title: titleRef.current?.value,
       content: textareeRef.current?.value,
       updateDate: Date.now(),
       isPinned: false
     }
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(list ? [...list, currentMemo] : [currentMemo])
-    )
+    const newMemo = list ? [...list, currentMemo] : [currentMemo]
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newMemo))
 
-    setMemo(storage ? JSON.parse(storage) : null)
     setAdding(false)
   }
 
