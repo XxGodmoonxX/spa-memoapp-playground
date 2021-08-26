@@ -50,7 +50,7 @@ const Container = styled.a<Pick<Props, 'href'>>`
   border: 1px solid black;
   display: block;
   color: black;
-  padding: 20px 40px 40px;
+  padding: 40px;
   box-sizing: border-box;
   position: relative;
 
@@ -64,7 +64,6 @@ const Container = styled.a<Pick<Props, 'href'>>`
       }
     `}
 
-
   & + & {
     margin-top: 20px;
   }
@@ -76,7 +75,10 @@ const Container = styled.a<Pick<Props, 'href'>>`
 
 const Heading = styled.h2`
   font-size: 22px;
-  margin: 20px 0 0;
+
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
 `
 
 const PinImg = styled.img`
