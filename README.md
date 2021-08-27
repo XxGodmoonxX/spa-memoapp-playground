@@ -4,12 +4,27 @@
 
 LocalStorage上にデータを保存するメモアプリです。
 
-## 環境
+## 開発環境
+
+### 技術構成
 
 - React
 - Next.js
+- TypeScript
 - styled-components
 
-## 実行方法
+### nodeのバージョン
 
-`yarn dev`でLocalhost上で確認ができます。
+`14.15.0`
+
+### インストール
+
+```shell
+yarn install
+```
+
+### 開発環境立ち上げ
+
+```shell
+yarn dev
+```
